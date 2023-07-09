@@ -233,7 +233,7 @@ def delete_post(post_id):
 @app.route("/author/<name>",methods = ["GET", "POST"])
 def show_author(name):
     # alle posts des authors anzeigen
-     author_posts = BlogPost.query.get(author_id)
+     author_posts = BlogPost.query.all()
     #author_posts = db.session.query(BlogPost).filter(BlogPost.author.name == name).all()
     
 
