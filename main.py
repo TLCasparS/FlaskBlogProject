@@ -13,7 +13,7 @@ import os
 #import psycopg2
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://blog_data_2kcd_user:DgJXBsZeNAt9k1ISqrQf0SKazU6Dr08P@dpg-cikphd15rnuvtgr0aa4g-a/blog_data_2kcd"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://blog_data_2kcd_user:DgJXBsZeNAt9k1ISqrQf0SKazU6Dr08P@dpg-cikphd15rnuvtgr0aa4g-a/blog_data_2kcd"
 
 
 ckeditor = CKEditor(app)
