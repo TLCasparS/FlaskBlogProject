@@ -235,9 +235,9 @@ def show_author(name):
     # alle posts des authors anzeigen
 
     author_posts = db.session.query(BlogPost).filter(BlogPost.author.name == name).all()
+    #author_posts = BlogPost.query.get(BlogPost.author.name)
 
-
-    return render_template("author.html", all_posts=author_posts, author = name, logged_in = current_user.is_authenticated)
+    return render_template("author.html", all_posts=author_posts, author = name, current_user=current_user)
 
 
 
