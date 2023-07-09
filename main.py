@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, url_for, flash, abort, request, flash
+from flask import Flask, render_template, redirect, url_for, flash, abort, request, flash,send_from_directory
+
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
@@ -11,10 +12,11 @@ from forms import LoginForm, RegisterForm, CreatePostForm, CommentForm
 from flask_gravatar import Gravatar
 import os
 import psycopg2
+from PIL import Image
 
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = 'FlaskBlogProject/static/uploads'
+UPLOAD_FOLDER = '../FlaskBlogProject/static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
@@ -262,14 +264,30 @@ def show_gallery():
 
     return render_template("gallery.html", main = main, current_user=current_user)
 
+app.add_url_rule(
+    "/uploads/<name>", endpoint="download_file", build_only=True
+)
 
-# UPLOADER
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route("/upload", methods =  ["GET", "POST"])
-def uploading():
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        source = f'../FlaskBlogProject/static/uploads/{filename}'
+
+        # convert file smaller and delete the original one
+        image = Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        image.save(source,'JPEG', quality=10)
+
+        #f.save(dst="FlaskBlogProject/static/uploads",secure_filename(f.filename))
+      #f.save(secure_filename(f.filename))
+        return 'file uploaded successfully'
+    return render_template('upload.html')
+
+
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
