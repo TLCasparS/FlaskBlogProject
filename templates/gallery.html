@@ -28,7 +28,7 @@
 
               <div class="card shadow-sm">
                 <img src="{{post.img_url}}"  width="300" style="object-fit:resize;">
-                     <a class="card-text" href="{{ url_for('show_post',post_title = post.title, post_id=post.id) }}">{{post.title|safe}}</a>
+                     <a class="card-text" href="{{ url_for('show_post',post_title = post.title, post_id=post.id) }}">{{post.title|safe}}: {{post.start}}-{{post.end}}</a>
 
 
 
