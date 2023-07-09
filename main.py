@@ -234,8 +234,8 @@ def delete_post(post_id):
 def show_author(name):
     # alle posts des authors anzeigen
 
-    author_posts = db.session.query(BlogPost).filter(BlogPost.author.name == name).all()
-    #author_posts = BlogPost.query.get(BlogPost.author.name)
+    #author_posts = db.session.query(BlogPost).filter(BlogPost.author.name == name).all()
+    author_posts = BlogPost.query.get(BlogPost.author.name)
 
     return render_template("author.html", all_posts=author_posts, author = name, current_user=current_user)
 
