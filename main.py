@@ -12,9 +12,9 @@ from flask_gravatar import Gravatar
 import os
 import psycopg2
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
-#app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://blog_data_2kcd_user:DgJXBsZeNAt9k1ISqrQf0SKazU6Dr08P@dpg-cikphd15rnuvtgr0aa4g-a/blog_data_2kcd"
 
+#connecting postregs database with environmental variables
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config["SQLALCHEMY_DATABASE_URI"] =  os.getenv('DB')
 
 ckeditor = CKEditor(app)
@@ -24,8 +24,7 @@ gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=Fa
 ##CONNECT TO DB
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URL')
-#app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
 
 
 db = SQLAlchemy(app)
