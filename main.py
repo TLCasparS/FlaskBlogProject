@@ -229,5 +229,18 @@ def delete_post(post_id):
     return redirect(url_for('get_all_posts'))
 
 
+
+@app.route("/author/<name>",methods = ["GET", "POST"])
+def show_author(name):
+    # alle posts des authors anzeigen
+
+    author_posts = db.session.query(BlogPost).filter(BlogPost.author == name).all()
+
+
+    return render_template("author.html", all_posts=author_posts, author = name, logged_in = current_user.is_authenticated)
+
+
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
