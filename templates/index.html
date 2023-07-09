@@ -32,9 +32,9 @@
           </a>
           <p class="post-meta">Posted by
             <a href="{{url_for('show_author', name = post.author.name) }}">{{post.author.name}}</a>
-            from {{post.start}} until {{post.end}}
+            Journey from {{post.start}} until {{post.end}}
             {% if current_user.id == 1: %}
-            <a href="{{url_for('delete_post', post_id=post.id) }}">✘</a>
+            <a href="{{url_for('delete_post', post_id=post.id) }}">DELETE</a>
             {% endif %}
           </p>
         </div>

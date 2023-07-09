@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, abort
+from flask import Flask, render_template, redirect, url_for, flash, abort, request, flash
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
@@ -11,8 +11,16 @@ from forms import LoginForm, RegisterForm, CreatePostForm, CommentForm
 from flask_gravatar import Gravatar
 import os
 import psycopg2
+
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = 'FlaskBlogProject/static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+
 app = Flask(__name__)
 
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #connecting postregs database with environmental variables
 #app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 #app.config["SQLALCHEMY_DATABASE_URI"] =  os.getenv('DB')
@@ -253,6 +261,15 @@ def show_gallery():
     main = db.session.query(BlogPost).all()
 
     return render_template("gallery.html", main = main, current_user=current_user)
+
+
+# UPLOADER
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route("/upload", methods =  ["GET", "POST"])
+def uploading():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
