@@ -1,0 +1,51 @@
+{% include "header.html" %}
+
+  <!-- Page Header -->
+<header class="masthead" style="background-image: url({{ url_for('static', filename='img/gallery.jpg')}})">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-8 mx-auto">
+          <div class="site-heading">
+            <h1> Travel gallery</h1>
+            <span class="subheading">A collection of the journeys photos .</span>
+
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+
+  <div class="container mx-auto" style="display:flex; flex-flow: wrap;">
+
+
+
+   {% for post in main %}
+     <div class = "row" style="padding: 30px">
+
+
+              <div class="card shadow-sm">
+                <img src="{{post.img_url}}"  width="300" style="object-fit:resize;">
+                     <a class="card-text" href="{{ url_for('show_post',post_title = post.title, post_id=post.id) }}">{{post.title|safe}}</a>
+
+
+
+              </div>
+            </div>
+        {% endfor %}
+
+
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+{% include "footer.html" %}
+
+
+
+<div class="col row-cols-3 row-cols-sm-2 row-cols-md-3 g-3">
+

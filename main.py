@@ -14,16 +14,17 @@ import psycopg2
 app = Flask(__name__)
 
 #connecting postregs database with environmental variables
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config["SQLALCHEMY_DATABASE_URI"] =  os.getenv('DB')
+#app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+#app.config["SQLALCHEMY_DATABASE_URI"] =  os.getenv('DB')
 
 ckeditor = CKEditor(app)
 Bootstrap(app)
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
 
 ##CONNECT TO DB
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
-#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Travell.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 
 
 
@@ -241,6 +242,11 @@ def show_author(name):
     
 
 
+@app.route("/gallery",methods = ["GET", "POST"])
+def show_gallery():
+    main = db.session.query(BlogPost).all()
+
+    return render_template("gallery.html", main = main, current_user=current_user)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
