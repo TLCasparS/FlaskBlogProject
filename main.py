@@ -22,7 +22,7 @@ Bootstrap(app)
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
 
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Travell.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Travel.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 
@@ -57,6 +57,8 @@ class BlogPost(db.Model):
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
     date = db.Column(db.String(250), nullable=False)
+    start = db.Column(db.String(250), nullable=False)
+    end = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
     comments = relationship("Comment", back_populates="parent_post")
@@ -185,6 +187,8 @@ def add_new_post():
         new_post = BlogPost(
             title=form.title.data,
             subtitle=form.subtitle.data,
+            start=form.start.data,
+            end=form.end.data,
             body=form.body.data,
             img_url=form.img_url.data,
             author=current_user,
@@ -207,6 +211,8 @@ def edit_post(post_id):
         title=post.title,
         subtitle=post.subtitle,
         img_url=post.img_url,
+        start = post.start,
+        end = post.end,
         author=current_user,
         body=post.body
     )
