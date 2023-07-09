@@ -1,3 +1,9 @@
+
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +17,10 @@
          <input type = "submit"/>
       </form>
 
-</form>
+
+
 </body>
 </html>
+
+{% include "footer.html" %}
+{% endblock %}

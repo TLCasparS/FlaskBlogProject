@@ -16,7 +16,7 @@ from PIL import Image
 
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '../FlaskBlogProject/static/uploads'
+UPLOAD_FOLDER = '../FlaskBlogProject/static/img/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
@@ -32,7 +32,7 @@ Bootstrap(app)
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
 
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Travel.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Bildessrs.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 
@@ -66,11 +66,12 @@ class BlogPost(db.Model):
     author = relationship("User", back_populates="posts")
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
-    date = db.Column(db.String(250), nullable=False)
+
     start = db.Column(db.String(250), nullable=False)
     end = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
-    img_url = db.Column(db.String(250), nullable=False)
+    img_url = db.Column(db.String(250), nullable=True)
+    #img_local = db.Column(db.String(250), nullable=True)
     comments = relationship("Comment", back_populates="parent_post")
 
 
@@ -82,6 +83,11 @@ class Comment(db.Model):
     parent_post = relationship("BlogPost", back_populates="comments")
     comment_author = relationship("User", back_populates="comments")
     text = db.Column(db.Text, nullable=False)
+
+class Photos(db.Model):
+    __tablename__ = "photos"
+    id = db.Column(db.Integer, primary_key=True)
+    img = db.Column(db.String(250), nullable=True)
 
 with app.app_context():
     db.create_all()
@@ -202,7 +208,7 @@ def add_new_post():
             body=form.body.data,
             img_url=form.img_url.data,
             author=current_user,
-            date=date.today().strftime("%B %d, %Y")
+
         )
         db.session.add(new_post)
         db.session.commit()
@@ -230,6 +236,8 @@ def edit_post(post_id):
         post.title = edit_form.title.data
         post.subtitle = edit_form.subtitle.data
         post.img_url = edit_form.img_url.data
+        post.start = edit_form.start.data
+        post.end = edit_form.end.data
         post.body = edit_form.body.data
         db.session.commit()
         return redirect(url_for("show_post", post_id=post.id))
@@ -276,15 +284,31 @@ def upload_file():
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        source = f'../FlaskBlogProject/static/uploads/{filename}'
+        source = f'../FlaskBlogProject/static/img/uploads/{filename}'
 
         # convert file smaller and delete the original one
         image = Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        image.save(source,'JPEG', quality=10)
-
+        image.save(source,'JPEG', quality=30)
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         #f.save(dst="FlaskBlogProject/static/uploads",secure_filename(f.filename))
       #f.save(secure_filename(f.filename))
-        return 'file uploaded successfully'
+
+        #todo 1. DB hinzufügen die die Bilder speicher
+        #todo 2. DB werden die Adresse der Bilder hinzufgefügt als String
+        #todo 3. Bild an post knüpfen
+        place = "img/uploads/" + filename
+        new_photo = Photos(
+            img = place
+        )
+
+        db.session.add(new_photo)
+        db.session.commit()
+
+
+        #todo file pfad aus db bekommen
+
+        return render_template('uploaded.html', show = place)
+
     return render_template('upload.html')
 
 
