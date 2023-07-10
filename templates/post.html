@@ -5,7 +5,9 @@
 {% include "header.html" %}
 
 <!-- Page Header -->
-<header class="masthead" style="background-image: url('{{post.img_url}}')">
+<header class="masthead" style="background-image: url({{url_for('static', filename=post.img_local)}} )">
+
+
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
